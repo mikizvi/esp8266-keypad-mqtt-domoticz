@@ -6,7 +6,7 @@ January 2022
 
 Use a keypad to control multiple devices.  Each key sends a different command.  I have a few installed at home, for example, at an entrance.  A few clicks when you enter/leave to switch different lights on or off.  Generally, the buttons send "toggle" commands so each button controls a different light, for example.
 
-This project sets up an ESP8266 with a keypad to send a different MQTT message or Domoticz http url command for each key pressed.
+This project sets up an ESP8266 with a keypad to send a different Tasmota-style MQTT message or Domoticz http url command for each key pressed.
 
 At startup, the code downloads its key assignments in the form of a json config file from a local http server.  This permits reprogramming by modifying the json config file.  If the config file is not understood for any reason, the configuration defaults to sending MQTT commands with a topic based on the last 6 hex digits of the MAC address (details below).
 
@@ -97,9 +97,10 @@ As always, the values for these resistors are recommendations only.  Tune these 
 ## Similar projects
 
 There are a few projects that do similar things:
-1. https://forum.iobroker.net/topic/35911/folientastatur-keypad-mit-tasmota
-2. https://github.com/f0rdprefect/esp8266-keypad-mqtt
-3. https://github.com/jaredsylvia/esp8266-keypad-mqtt
+1. [Tasmota](https://github.com/tasmota)
+2. [Folientastatur/Keypad mit Tasmota](https://forum.iobroker.net/topic/35911/folientastatur-keypad-mit-tasmota)
+3. [f0rdprefect/esp8266-keypad-mqtt](https://github.com/f0rdprefect/esp8266-keypad-mqtt)
+4. [jaredsylvia/esp8266-keypad-mqtt](https://github.com/jaredsylvia/esp8266-keypad-mqtt)
 
 ## Keywords
 
