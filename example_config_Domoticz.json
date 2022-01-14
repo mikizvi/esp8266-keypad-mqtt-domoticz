@@ -1,0 +1,70 @@
+{
+  "device": "keypad_test",
+  "protocol": "Domoticz",
+  "buttons" : {
+    "1": {
+      "friendly-name": "Lounge Main",
+      "idx": 108
+    },
+    "2": {
+      "friendly-name": "Lounge TV",
+      "idx": 112
+    },
+    "3": {
+      "friendly-name": "Lounge Passage",
+      "idx": 111
+    },
+    "A": {
+      "friendly-name": "Front Door Flood",
+      "idx": 43
+    },
+    "4": {
+      "friendly-name": "Kitchen",
+      "idx": 41
+    },
+    "5": {
+      "friendly-name": "Dining Room",
+      "idx": 42
+    },
+    "6": {
+      "friendly-name": "Moon",
+      "idx": 92
+    },
+    "B": {
+      "friendly-name": "Big Veranda Fan",
+      "idx": 187
+    },
+    "7": {
+      "friendly-name": "Big Veranda Flourescent",
+      "idx": 82
+    },
+    "8": {
+      "friendly-name": "Big Veranda Doorway",
+      "idx": 80
+    },
+    "9": {
+      "friendly-name": "Big Veranda Mosquitto",
+      "idx": 79
+    },
+    "C": {
+      "friendly-name": "Big Veranda Spots",
+      "idx": 176
+    },
+    "*": {
+      "friendly-name": "Side Flood",
+      "idx": 46
+    },
+    "0": {
+      "friendly-name": "Garden",
+      "idx": 81
+    },
+    "#": {
+      "friendly-name": "Big Veranda Retro",
+      "idx": 180
+    },
+    "D": {
+      "friendly-name": "Braai Flood",
+      "idx": 27
+    }
+  }
+}

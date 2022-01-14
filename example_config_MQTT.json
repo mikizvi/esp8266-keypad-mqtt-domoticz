@@ -1,0 +1,87 @@
+{
+  "device": "keypad_test",
+  "full-topic-format": "%s/%s/%s",
+  "protocol": "MQTT",
+  "buttons" : {
+    "1": {
+      "friendly-name": "Lounge Main",
+      "topic": "lounge_main",
+      "cmnd": "power"
+    },
+    "2": {
+      "friendly-name": "Lounge TV",
+      "topic": "lounge_side",
+      "cmnd": "power1"
+    },
+    "3": {
+      "friendly-name": "Lounge Passage",
+      "topic": "lounge_side",
+      "cmnd": "power2"
+    },
+    "A": {
+      "friendly-name": "Front Door Flood",
+      "topic": "motorbike",
+      "cmnd": "power1"
+    },
+    "4": {
+      "friendly-name": "Kitchen",
+      "topic": "kitchen_3",
+      "cmnd": "power2"
+    },
+    "5": {
+      "friendly-name": "Dining Room",
+      "topic": "kitchen_3",
+      "cmnd": "power1"
+    },
+    "6": {
+      "friendly-name": "Entrance Hall",
+      "topic": "entrance",
+      "cmnd": "power1"
+    },
+    "B": {
+      "friendly-name": "Big Veranda Fan",
+      "topic": "big_veranda_fan",
+      "cmnd": "power"
+    },
+    "7": {
+      "friendly-name": "Big Veranda Flourescent",
+      "topic": "big_veranda",
+      "cmnd": "power4"
+    },
+    "8": {
+      "friendly-name": "Big Veranda Doorway",
+      "topic": "big_veranda",
+      "cmnd": "power1"
+    },
+    "9": {
+      "friendly-name": "Big Veranda Mosquitto",
+      "topic": "big_veranda",
+      "cmnd": "power2"
+    },
+    "C": {
+      "friendly-name": "Big Veranda Spots",
+      "topic": "big_veranda_spots",
+      "cmnd": "power"
+    },
+    "*": {
+      "friendly-name": "Side Flood",
+      "topic": "front_door",
+      "cmnd": "power2"
+    },
+    "0": {
+      "friendly-name": "Garden",
+      "topic": "big_veranda",
+      "cmnd": "power3"
+    },
+    "#": {
+      "friendly-name": "Big Veranda Retro",
+      "topic": "big_veranda_retro",
+      "cmnd": "power"
+    },
+    "D": {
+      "friendly-name": "BBQ Flood",
+      "topic": "back_flood",
+      "cmnd": "power"
+    }
+  }
+}
