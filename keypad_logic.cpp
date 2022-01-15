@@ -1,5 +1,5 @@
 /**
- * keypad.cpp
+ * keypad_logic.cpp
  *
  * Created on: 2021-12-24
  *
@@ -29,7 +29,7 @@
 #include "http.h"
 #include "domoticz.h"
 #include "utils.h"
-#include "keypad.h"
+#include "keypad_logic.h"
 
 static const byte ROWS = 4; // define row 4
 static const byte COLS = 4; // define column 4

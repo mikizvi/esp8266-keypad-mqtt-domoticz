@@ -30,7 +30,7 @@
 #include "mqtt.h"
 #include "http.h"
 #include "domoticz.h"
-#include "keypad.h"
+#include "keypad_logic.h"
 #include "secrets.h"
 
 static String protocol;
