@@ -29,9 +29,10 @@
 Subscribe mechanism
 
 The MQTT library loses all subscribers every reconnect.
-This code maintains a list of functions to do the subcribes after every reconnect.
-Use mqtt_add_subscribe() to add a subscribe_t function to this list.
-Your subscribe_t function must call mqtt_subscribe() to do the actual subscription.
+This code maintains a list of functions to do the subcribes after every
+reconnect. Use mqtt_add_subscribe() to add a subscribe_t function to this list.
+Your subscribe_t function must call mqtt_subscribe() to do the actual
+subscription.
 
 Example:
 
@@ -49,21 +50,27 @@ void my_setup()
 /*
 Callback mechanism
 
-This code maintains a list of functions that are called whenever a subscribed topic triggers a callback.
-Use mqtt_add_callback() to add a callback_t function to this list.
+This code maintains a list of functions that are called whenever a subscribed
+topic triggers a callback. Use mqtt_add_callback() to add a callback_t function
+to this list.
 */
 
+typedef void (*callback_t)(void* user_data, const char* topic, uint8_t* payload,
+                           unsigned int length);
+typedef bool (*subscribe_t)(void* user_data);
 
-typedef void (*callback_t)(void *user_data, char *topic, uint8_t *payload, unsigned int length);
-typedef bool (*subscribe_t)(void *user_data);
-
-void setup_mqtt(String device_name, const char* mqtt_server, int mqtt_port, const char* mqtt_user, const char* mqtt_password);
+void setup_mqtt(String device_name, const char* mqtt_server, int mqtt_port,
+                const char* mqtt_user, const char* mqtt_password);
 void loop_mqtt();
 bool mqtt_publish(const char* topic, const char* payload);
-void mqtt_add_callback(callback_t callback, void *user_data);
-void mqtt_add_subscribe(subscribe_t subscribe, void *user_data);
+void mqtt_add_callback(callback_t callback, void* user_data);
+void mqtt_add_subscribe(subscribe_t subscribe, void* user_data);
+String mqtt_construct_topic(String full_topic_format, const char* action,
+                            const char* destination_device,
+                            const char* command);
 
-// Call this function from inside the subscribe() function added using mqtt_add_subscribe()
+// Call this function from inside the subscribe() function added using
+// mqtt_add_subscribe()
 bool mqtt_subscribe(const char* topic);
 
 #endif // MQTT_H

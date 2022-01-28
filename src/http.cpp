@@ -22,9 +22,9 @@
  *
  */
 #include <Arduino.h>
+#include "secrets.h"
 #include "wifi.h"
 #include "http.h"
-#include "secrets.h"
 
 // HTTP connection (for config file)
 String http_server(HTTP_SERVER);
@@ -33,37 +33,32 @@ String http_user(HTTP_USER);
 String http_password(HTTP_PASSWORD);
 String http_uri(HTTP_URI);
 
-
 #ifdef ESP8266
 #include <ESP8266HTTPClient.h>
 #define HTTP_CLIENT HTTPClient
 #else // !ESP8266
-#include <WiFiEsp.h>
 #include <HttpClient.h>
+#include <WiFiEsp.h>
 #define HTTP_CLIENT HttpClient
 #endif // ESP8266
 
-String http_get(
-  String http_server,
-  uint16_t http_port,
-  String http_user,
-  String http_password,
-  String http_url,
-  int &http_code)
+String http_get(String http_server, uint16_t http_port, String http_user,
+                String http_password, String http_url, int& http_code)
 {
-  String payload;
-  HTTP_CLIENT http;  //Declare an object of class HTTPClient
+    String payload;
+    HTTP_CLIENT http; // Declare an object of class HTTPClient
 
-  http.begin(wifi_client, http_server, http_port, http_url);  //Specify request destination
-  if ((http_user != "") || (http_password != "")) {
-    http.setAuthorization(http_user.c_str(), http_password.c_str());
-  }
-  http_code = http.GET();
-  if (http_code > 0) {
-    payload = http.getString();
-  }
+    http.begin(wifi_client, http_server, http_port,
+               http_url); // Specify request destination
+    if ((http_user != "") || (http_password != "")) {
+        http.setAuthorization(http_user.c_str(), http_password.c_str());
+    }
+    http_code = http.GET();
+    if (http_code > 0) {
+        payload = http.getString();
+    }
 
-  http.end();
+    http.end();
 
-  return payload;
+    return payload;
 }

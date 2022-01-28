@@ -1,5 +1,5 @@
 /**
- * http.h
+ * utils.h
  *
  * Created on: 2021-12-24
  *
@@ -22,22 +22,41 @@
  *
  */
 
-#ifndef HTTP_H
-#define HTTP_H
+#ifndef UTILS_H
+#define UTILS_H
 
-// HTTP connection (for config file)
-extern String http_server;
-extern const uint16_t http_port;
-extern String http_user;
-extern String http_password;
-extern String http_uri;
+#include "device-specific.h"
 
-String http_get(
-  String http_server,
-  uint16_t http_port,
-  String http_user,
-  String http_password,
-  String http_url,
-  int &http_code);
+#ifdef DEBUG
+#define dbg_printf Serial.printf
+#else // DEBUG
+#define dbg_printf(...)
+#endif // DEBUG
 
-#endif // HTTP_H
+// LED that works (usually to give feedback)
+// used by MQTT connection code to show connecting
+#ifdef ESP8266
+#if defined(ARDUINO_ESP8266_WEMOS_D1MINI)
+#ifndef LED
+#define LED D4
+#endif // LED
+#define LED_ON HIGH
+#define LED_OFF LOW
+#else
+#define LED BUILTIN_LED
+#define LED_ON LOW
+#define LED_OFF HIGH
+#endif
+#else // ESP8266
+#ifndef LED
+#define LED BUILTIN_LED
+#endif // LED
+#define LED_ON HIGH
+#define LED_OFF LOW
+#endif // ESP8266
+
+void setup_utils();
+
+String default_device_name(String prefix, String mac_addr);
+
+#endif // UTILS_H

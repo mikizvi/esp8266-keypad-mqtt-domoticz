@@ -1,5 +1,5 @@
 /**
- * utils.cpp
+ * wifi.h
  *
  * Created on: 2021-12-24
  *
@@ -22,35 +22,25 @@
  *
  */
 
-#include <Arduino.h>
-#include "utils.h"
+#ifndef WIFI_H
+#define WIFI_H
 
-void setup_utils()
-{
-    pinMode(LED, OUTPUT);
-}
+#ifdef ESP8266
+#include <ESP8266WiFi.h>
+#define WIFI_CLIENT WiFiClient
+#else // !ESP8266
+#include <WiFiEsp.h>
+#define WIFI_CLIENT WiFiEspClient
+#endif // ESP8266
 
-String default_device_name(String prefix, String mac_addr)
-{
-  // MAC address           1
-  // MAC address 01:34:67:90:23:56
-  
-  String ret;
-  char mac_tail[7];
-  const char *mac_str = mac_addr.c_str();
-  
-  if (strlen(mac_str) != 17) {
-    Serial.printf("MAC address isn't 17 chars \"%s\"\n", mac_str);
-    return prefix;
-  }
-  mac_tail[0] = mac_str[9];
-  mac_tail[1] = mac_str[10];
-  mac_tail[2] = mac_str[12];
-  mac_tail[3] = mac_str[13];
-  mac_tail[4] = mac_str[15];
-  mac_tail[5] = mac_str[16];
-  mac_tail[6] = '\0';
-  ret = prefix + "_" + mac_tail;
-  dbg_printf("MAC \"%s\", tail \"%s\", ret \"%s\"\n", mac_str, mac_tail, ret.c_str());
-  return ret;
-}
+// Wifi connection
+extern WIFI_CLIENT wifi_client;
+
+// values set after connection made
+
+extern String ip_addr;
+extern String mac_addr;
+
+void setup_wifi(const char* ssid, const char* password);
+
+#endif // WIFI_H

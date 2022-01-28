@@ -1,5 +1,5 @@
 /**
- * domoticz.h
+ * keypad_logic.h
  *
  * Created on: 2021-12-24
  *
@@ -22,15 +22,13 @@
  *
  */
 
-#ifndef DOMOTICZ_H
-#define DOMOTICZ_H
+#ifndef KEYPAD_LOGIC_H
+#define KEYPAD_LOGIC_H
 
-void domoticz_setup(
-  String domoticz_server,
-  const uint16_t domoticz_port,
-  String domoticz_user,
-  String domoticz_password);
+void setup_keypad(String http_server, uint16_t http_port, String http_user,
+                  String http_password, String http_uri, String mac_addr,
+                  String& device_name, String& protocol,
+                  String& full_topic_format);
+void loop_keypad(String protocol);
 
-String domoticz_toggle(unsigned int idx, int &http_code);
-
-#endif // DOMOTICZ_H
+#endif // KEYPAD_LOGIC_H

@@ -1,5 +1,5 @@
 /**
- * wifi.h
+ * http.h
  *
  * Created on: 2021-12-24
  *
@@ -22,25 +22,17 @@
  *
  */
 
-#ifndef WIFI_H
-#define WIFI_H
+#ifndef HTTP_H
+#define HTTP_H
 
-#ifdef ESP8266
-#include <ESP8266WiFi.h>
-#define WIFI_CLIENT WiFiClient
-#else // !ESP8266
-#include <WiFiEsp.h>
-#define WIFI_CLIENT WiFiEspClient
-#endif // ESP8266
+// HTTP connection (for config file)
+extern String http_server;
+extern const uint16_t http_port;
+extern String http_user;
+extern String http_password;
+extern String http_uri;
 
-// Wifi connection
-extern WIFI_CLIENT wifi_client;
+String http_get(String http_server, uint16_t http_port, String http_user,
+                String http_password, String http_url, int& http_code);
 
-// values set after connection made
-
-extern String ip_addr;
-extern String mac_addr;
-
-void setup_wifi(const char *ssid, const char *password);
-
-#endif // WIFI_H
+#endif // HTTP_H

@@ -30,46 +30,46 @@ static uint16_t domoticz_save_port;
 static String domoticz_save_user;
 static String domoticz_save_password;
 
-void domoticz_setup(
-  String domoticz_server,
-  const uint16_t domoticz_port,
-  String domoticz_user,
-  String domoticz_password)
+void domoticz_setup(String domoticz_server, const uint16_t domoticz_port,
+                    String domoticz_user, String domoticz_password)
 {
-  domoticz_save_server = domoticz_server;
-  domoticz_save_port = domoticz_port;
-  domoticz_save_user = domoticz_user;
-  domoticz_save_password = domoticz_password;
+    domoticz_save_server = domoticz_server;
+    domoticz_save_port = domoticz_port;
+    domoticz_save_user = domoticz_user;
+    domoticz_save_password = domoticz_password;
 }
 
 // HTTP connection (for config file)
-
 
 #ifdef ESP8266
 #include <ESP8266HTTPClient.h>
 #define HTTP_CLIENT HTTPClient
 #else // !ESP8266
-#include <WiFiEsp.h>
 #include <HttpClient.h>
+#include <WiFiEsp.h>
 #define HTTP_CLIENT HttpClient
 #endif // ESP8266
 
-String domoticz_toggle(unsigned int idx, int &http_code)
+String domoticz_toggle(unsigned int idx, int& http_code)
 {
-  String payload;
-  HTTP_CLIENT http_client;  //Declare an object of class HTTPClient
-  String domoticz_url = String("/json.htm?type=command&param=switchlight&idx=") + idx + "&switchcmd=Toggle";
+    String payload;
+    HTTP_CLIENT http_client; // Declare an object of class HTTPClient
+    String domoticz_url
+        = String("/json.htm?type=command&param=switchlight&idx=") + idx
+        + "&switchcmd=Toggle";
 
-  http_client.begin(wifi_client, domoticz_save_server, domoticz_save_port, domoticz_url);  //Specify request destination
-  if ((domoticz_save_user != "") || (domoticz_save_password != "")) {
-    http_client.setAuthorization(domoticz_save_user.c_str(), domoticz_save_password.c_str());
-  }
-  http_code = http_client.GET();
-  if (http_code > 0) {
-    payload = http_client.getString();
-  }
+    http_client.begin(wifi_client, domoticz_save_server, domoticz_save_port,
+                      domoticz_url); // Specify request destination
+    if ((domoticz_save_user != "") || (domoticz_save_password != "")) {
+        http_client.setAuthorization(domoticz_save_user.c_str(),
+                                     domoticz_save_password.c_str());
+    }
+    http_code = http_client.GET();
+    if (http_code > 0) {
+        payload = http_client.getString();
+    }
 
-  http_client.end();
+    http_client.end();
 
-  return payload;
+    return payload;
 }

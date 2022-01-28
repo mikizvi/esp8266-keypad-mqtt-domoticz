@@ -1,5 +1,5 @@
 /**
- * keypad_logic.h
+ * led_logic.h
  *
  * Created on: 2021-12-24
  *
@@ -22,19 +22,11 @@
  *
  */
 
-#ifndef GEN_KEYPAD_H
-#define GEN_KEYPAD_H
-#include "secrets.h"
+#ifndef LED_LOGIC_H
+#define LED_LOGIC_H
 
-void setup_keypad(
-  String http_server,
-  uint16_t http_port,
-  String http_user,
-  String http_password,
-  String http_uri,
-  String mac_addr,
-  String &device_name,
-  String &protocol);
-void loop_keypad(String protocol);
+void operate_led(int to_state);
+void setup_led(String full_topic_format, String device_name);
+void loop_led();
 
-#endif // GEN_KEYPAD_H
+#endif // LED_LOGIC_H

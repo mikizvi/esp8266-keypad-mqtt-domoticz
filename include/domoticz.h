@@ -1,5 +1,5 @@
 /**
- * utils.h
+ * domoticz.h
  *
  * Created on: 2021-12-24
  *
@@ -22,41 +22,12 @@
  *
  */
 
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef DOMOTICZ_H
+#define DOMOTICZ_H
 
-#include "device-specific.h"
+void domoticz_setup(String domoticz_server, const uint16_t domoticz_port,
+                    String domoticz_user, String domoticz_password);
 
-#ifdef DEBUG
-#define dbg_printf Serial.printf
-#else // DEBUG
-#define dbg_printf(...)
-#endif // DEBUG
+String domoticz_toggle(unsigned int idx, int& http_code);
 
-// LED that works (usually to give feedback)
-// used by MQTT connection code to show connecting
-#ifdef ESP8266
-#if defined(ARDUINO_ESP8266_WEMOS_D1MINI)
-#ifndef LED
-#define LED D4
-#endif // LED
-#define LED_ON  HIGH
-#define LED_OFF LOW
-#else
-#define LED BUILTIN_LED
-#define LED_ON  LOW
-#define LED_OFF HIGH
-#endif
-#else // ESP8266
-#ifndef LED
-#define LED BUILTIN_LED
-#endif // LED
-#define LED_ON  HIGH
-#define LED_OFF LOW
-#endif // ESP8266
-
-void setup_utils();
-
-String default_device_name(String prefix, String mac_addr);
-
-#endif // UTILS_H
+#endif // DOMOTICZ_H

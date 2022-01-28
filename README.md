@@ -1,8 +1,8 @@
-# Generic ESP8266 MQTT/Domoticz Keypad
+# Generic ESP8266 MQTT/Domoticz Keypad (PlatformIO version)
 Michael Hirsch  
 January 2022
 
-![Completed project](https://github.com/mikizvi/esp8266-keypad-mqtt-domoticz/blob/main/final-project-small.jpg)
+![Completed project](https://github.com/mikizvi/esp8266-keypad-mqtt-domoticz/blob/main/doc/final-project-small.jpg)
 
 Use a keypad to control multiple devices.  Each key sends a different command.  I have a few installed at home, for example, at an entrance.  A few clicks when you enter/leave to switch different lights on or off.  Generally, the buttons send "toggle" commands so each button controls a different light, for example.
 
@@ -14,35 +14,42 @@ There are a few examples of techniques in this project that may make it interest
 1. How to connect to WiFi.  The red LED flashes on and off until connected.
 2. How to get a file from an HTTP server
 3. How to decode json
-4. How to use MQTT as a publisher and as a subscriber, with a simple mechanism to re-subscribe after an MQTT reconnect
-5. How to send http url commands to a Domoticz server
-6. And of course, how to use a keypad with a ESP 8266.  The LED is turned on while the button is pressed.
+4. How to use MQTT as a publisher to send topics and messages
+5. How to use MQTT as a subscriber, with a simple mechanism to re-subscribe after an MQTT reconnect
+6. How to send http url commands to a Domoticz server
+7. And of course, how to use a keypad with a ESP 8266.  The LED is turned on while the button is pressed.
 
 The files are organized in a way that you should be able to pick out the relevant .h and .c file and use it in your project.  Of course, there are dependencies: look at the files included by the .cpp files.
 
 ## Deploying
 
-The `secrets.h` idea is adopted from one of the projects below.  Your site configuration is in `secrets.h`. You will need to copy the `secrets.h.dist` to `secrets.h` and fill in your details.
+The `secrets.h` idea is adopted from one of the projects below.  Your site configuration is in `secrets.h`. You will need to copy the `secrets.h.dist` to `secrets.h` and fill in your details.  If you plan to use only MQTT commands, then you don't need to fill in the Domoticz details and vice versa.
 
-You may need to edit/change the way that MQTT topics are constructed depending on your site customizations.  See `construct_mqtt_cmnd()` in `keypad.cpp`.
+You may need to edit/change the way that MQTT topics are constructed depending on your site customizations.  See `mqtt_construct_topic()` in `mqtt.cpp`.
 
-My development environment is the Arduino IDE.  I use the "LOLIN(WEMOS) D1 R2 & mini" board.  There are a few libraries that you will need to install:
+This project has been adapted for PlatformIO in VSCode.  This excellent [tutorial](https://www.electronicshub.org/programming-esp8266-using-vs-code-and-platformio/) was my guide to installing and first steps.
+  I use the "D1 mini" board.  There are a few libraries that you will need to install:
 1. [ArduinoJson](https://arduinojson.org/?utm_source=meta&utm_medium=library.properties) by Benoit Blanchon (6.18.5)
 2. [Keypad](https://playground.arduino.cc/Code/Keypad/) by Mark Stanley, Alexander Brevig (3.1.1)
 3. [PubSubClient](https://pubsubclient.knolleary.net/) by Nick O'Leary (2.8.0)
 
-The configuration file is fetched from a http server.  You can disable this behavior by commenting out the `#define FETCH_CONFIG` in your secrets.h file.  My HTTP server runs on my internal LAN using a simple `/usr/bin/python3 -m http.server 8008`.  The code looks for the configuration files in the subdir `config`, named `config/<MAC-ADDR>.json`.
+The configuration file is fetched from a http server.  You can disable this behavior by commenting out the `#define FETCH_CONFIG` in your secrets.h file.  My HTTP server runs on my internal LAN using a simple `/usr/bin/python3 -m http.server 8008`.  The code looks for the configuration files in the subdir `config`, named `config/\<MAC-ADDR>.json`, where the *MAC-ADDR* has all its colon (":") characters replaced by dashes ("-") because some file systems do not allow or do not like file names with colons.
 
 There are example MQTT and Domoticz config files in the distribution.  The config file contains fields:
-- "device": a name for the device, used as the prefix for the MQTT client name.  The suffix is the IP address
-- "protocol": "MQTT" or "Domoticz"
-- button assignements: a friendly name (for debug prints to serial), and (for MQTT) the destination topic and command or (for Domoticz) the idx
+* **device**: a name for the device
+  + The topic of this device uses this as the prefix and the IP address as the suffix
+* **protocol**: "MQTT" or "Domoticz"
+* **full-topic-format**: required for MQTT.  Usually `<operation>/<topic>/<command>` (see `mqtt_construct_topic()` in `mqtt.ccp`) where
+  + *operation* is something like cmnd or stat
+  + *topic* is usually the target device
+  + *command* is something like power or power2.
+* **buttons**: button assignements: a friendly name (for debug prints to serial), and (for MQTT) the destination topic and command or (for Domoticz) the idx
 
 ```
 {
   "device": "keypad_test",
-  "full-topic-format": "%s/%s/%s",
   "protocol": "MQTT",
+  "full-topic-format": "%s/%s/%s",
   "buttons" : {
     "1": {
       "friendly-name": "Lounge Main",
@@ -53,17 +60,19 @@ There are example MQTT and Domoticz config files in the distribution.  The confi
 ...
 ```
 
-If there is no HTTP server for the configuration or if the configuration isn't valid json, and so on ... the device uses a default configuration.  In this case, each key press sends a `cmnd/keypad_<mac suffix>/<key> toggle` command, where "mac suffix" is the last 6 digits of the MAC address.  In the case of a "#" key, the character "P" is sent because '#' is an MQTT wildcard character.
+If there is no HTTP server for the configuration or if the configuration isn't valid json, and so on ... the device uses a default configuration.  In this case, the default topic is `keypad_<mac suffix>`, where *mac suffix* is the last 6 digits of the MAC address.  Each key press sends a `cmnd/<topic>/<key> toggle` command.  In the case of a "#" key, the character "P" is sent because '#' is an MQTT wildcard character.
+
+This version subscribes to the `power` command (default full topic `cmnd/<topic>/power`) and accepts messages `on`, `off` and `toggle`.  These operate on the same LED that toggles on and off when a key is pressed.  Operations are acknowledged by publishing `stat/<topic>/POWER` and `stat/<topic>/RESULT`, copying Tasmota behavior.
 
 ## Schematics
 
-![Schematics](https://github.com/mikizvi/esp8266-keypad-mqtt-domoticz/blob/main/esp8266-mqtt-keypad.png)
+![Schematics](https://github.com/mikizvi/esp8266-keypad-mqtt-domoticz/blob/main/doc/esp8266-mqtt-keypad.png)
 
 As always, the values for these resistors are recommendations only.  Tune these to get your LEDs to the brightness you want.  The green power LED is optional anyway.
 
 ## Prototype
 
-![Completed project](https://github.com/mikizvi/esp8266-keypad-mqtt-domoticz/blob/main/prototype-small.jpg)
+![Working prototype](https://github.com/mikizvi/esp8266-keypad-mqtt-domoticz/blob/main/doc/prototype-small.jpg)
 
 
 ## License
@@ -104,4 +113,4 @@ There are a few projects that do similar things:
 
 ## Keywords
 
-ESP8266, keypad, MQTT, Domoticz, home automation, smart home, IOT
+ESP8266, keypad, MQTT, Domoticz, home automation, smart home, IOT, PlatformIO
